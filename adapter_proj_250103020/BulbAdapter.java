@@ -4,6 +4,8 @@ public class BulbAdapter implements SmartDeviceRO {
     public BulbAdapter(LegacyBulbRO legacyBulb) {
         this.legacyBulb = legacyBulb;
     }
+    
+
 
     @Override
     public void turnOn() {
@@ -22,6 +24,12 @@ public class BulbAdapter implements SmartDeviceRO {
 
     @Override
     public int getPowerPercent() {
-        return (int) ((legacyBulb.readBrightness() / 255.0) * 100);
+        if(!legacyBulb.hasPower()){
+            return 0;
+        }
+        
+        int raw_percent = (int) ((legacyBulb.readBrightness()/255.0) * 100);
+        int cal_percent=raw_percent+0; //250103020 <
+        return cal_percent;
     }
 }

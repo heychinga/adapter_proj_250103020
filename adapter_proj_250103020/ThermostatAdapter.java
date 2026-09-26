@@ -21,15 +21,30 @@ public class ThermostatAdapter implements SmartDeviceRO{
 
     @Override 
     public boolean isOn(){
-        if(thermostat.checkDial().equals("IDLE")){
+        if(thermostat.checkDial()==null){
             return false;
         }
-        return true;
+        switch(thermostat.checkDial()){
+            case "LOW":
+                return true;
+            case "MEDIUM":
+                return true;
+            case "MAX":
+                return true;
+            default://for IDLE and any unrecognized dial states
+                return false;
+        }
+        
+        
+
         
     }
 
     @Override 
     public int getPowerPercent(){
+        if(thermostat.checkDial().equals("IDLE")){
+            return 0;
+        }
         if(thermostat.checkDial().equals("LOW")){
             return 33;
         }
@@ -39,7 +54,7 @@ public class ThermostatAdapter implements SmartDeviceRO{
         if(thermostat.checkDial().equals("MAX")){
             return 100;
         }
-        return 0;
+        return -1;
         
     }
 }
